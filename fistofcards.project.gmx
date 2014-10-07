@@ -8,11 +8,17 @@
   <sprites name="sprites">
     <sprite>sprites\spr_player_up</sprite>
     <sprite>sprites\spr_player_down</sprite>
+    <sprites name="Cards">
+      <sprite>sprites\spr_card_stack</sprite>
+      <sprite>sprites\spr_card_club</sprite>
+      <sprite>sprites\spr_card_stab</sprite>
+      <sprite>sprites\spr_card_freeze</sprite>
+    </sprites>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\script0.gml</script>
+    <script>scripts\random_card_selector.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fn_system</font>
@@ -21,6 +27,13 @@
     <object>objects\obj_player</object>
     <object>objects\obj_inv</object>
     <object>objects\obj_cards</object>
+    <objects name="Cards">
+      <object>objects\obj_card_empty</object>
+      <object>objects\obj_card_base</object>
+      <object>objects\obj_card_club</object>
+      <object>objects\obj_card_stab</object>
+      <object>objects\obj_card_freeze</object>
+    </objects>
   </objects>
   <rooms name="rooms">
     <room>rooms\default_room</room>
