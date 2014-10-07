@@ -25,7 +25,10 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>allowed_slot[0] = true;
+            <string>//dev code TODO remove
+random_set_seed(randomize());
+
+allowed_slot[0] = true;
 allowed_slot[1] = true;
 allowed_slot[2] = false;
 allowed_slot[3] = false;

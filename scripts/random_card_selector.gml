@@ -1,6 +1,6 @@
 //to fix
-cards[1] = obj_card_stab;
-cards[2] = obj_card_freeze;
-cards[3] = obj_card_stab;
+cards[0] = obj_card_stab;
+cards[1] = obj_card_freeze;
+cards[2] = obj_card_club;
 
-return cards[irandom(3)];
+return cards[irandom(2)];
