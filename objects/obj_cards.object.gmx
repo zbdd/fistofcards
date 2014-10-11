@@ -26,10 +26,10 @@
           <argument>
             <kind>1</kind>
             <string>///card control
-slot[0] = true;
-slot[1] = false;
-slot[2] = false;
-slot[3] = false;
+cards = ds_list_create();
+ds_list_add(cards, obj_card_club);
+ds_list_add(cards, obj_card_stab);
+ds_list_add(cards, obj_card_freeze);
 </string>
           </argument>
         </arguments>

@@ -27,6 +27,7 @@
             <kind>1</kind>
             <string>depth = y * -1;
 cardnum = 0;
+played = false;
 </string>
           </argument>
         </arguments>
@@ -49,9 +50,11 @@ cardnum = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_set_color(c_blue);
-draw_text(x + sprite_width / 2, y + sprite_height, cardnum);
-draw_self();
+            <string>if (!played) {
+    draw_set_color(c_blue);
+    draw_text(x + sprite_width / 2, y + sprite_height, cardnum);
+    draw_self();
+}
 </string>
           </argument>
         </arguments>

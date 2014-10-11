@@ -19,12 +19,14 @@
   <paths name="paths"/>
   <scripts name="scripts">
     <script>scripts\random_card_selector.gml</script>
+    <script>scripts\play_card.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fn_system</font>
   </fonts>
   <objects name="objects">
     <object>objects\obj_player</object>
+    <object>objects\obj_enemy_base</object>
     <object>objects\obj_inv</object>
     <object>objects\obj_cards</object>
     <objects name="Cards">
@@ -37,6 +39,7 @@
   </objects>
   <rooms name="rooms">
     <room>rooms\default_room</room>
+    <room>rooms\backuproom</room>
   </rooms>
   <constants number="2">
     <constant name="GM_build_date">41919.4969761921</constant>
