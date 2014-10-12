@@ -29,11 +29,10 @@
 //or pull this into one demi-god object.
 instance_create(x,y,obj_cards);
 instance_create(x,y,obj_inv);
+instance_create(x,y,obj_enemies);
 
 //actual player creation code
 image_speed = 0.1;
-
-show_debug_message(obj_player);
 </string>
           </argument>
         </arguments>
@@ -68,6 +67,21 @@ if (inv_key_pressed &gt; 0) {
     obj_inv.card_at_slot[inv_key_pressed - 1].played = true;    
 }
 
+with (obj_enemies) {
+    if (!ds_list_empty(active)) {
+        dist = 600;
+        for (index = 0; index &lt; ds_list_size(active); index++) {
+            a2 = sqr(obj_player.x - active[| index].x);
+            b2 = sqr(obj_player.y - active[| index].y);
+            new_dist = sqrt(a2 + b2);
+                        
+            if (new_dist &lt; dist) {
+                dist = new_dist;
+                closest_enemy = active[| index];
+            }
+        }
+    }
+}
 move_towards_point(mouse_x, mouse_y, 2);
 </string>
           </argument>

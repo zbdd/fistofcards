@@ -14,6 +14,7 @@
       <sprite>sprites\spr_card_stab</sprite>
       <sprite>sprites\spr_card_freeze</sprite>
     </sprites>
+    <sprite>sprites\spr_selected</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -29,6 +30,7 @@
     <object>objects\obj_enemy_base</object>
     <object>objects\obj_inv</object>
     <object>objects\obj_cards</object>
+    <object>objects\obj_enemies</object>
     <objects name="Cards">
       <object>objects\obj_card_empty</object>
       <object>objects\obj_card_base</object>
