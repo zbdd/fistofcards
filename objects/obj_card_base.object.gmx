@@ -52,7 +52,7 @@ played = false;
             <kind>1</kind>
             <string>if (!played) {
     draw_set_color(c_blue);
-    draw_text(x + sprite_width / 2, y + sprite_height, cardnum);
+    txt = draw_text(x + sprite_width / 2, y + sprite_height, cardnum);
     draw_self();
 }
 </string>

@@ -50,7 +50,7 @@ draw_self();
           <argument>
             <kind>1</kind>
             <string>draw_set_color(c_black);
-draw_text(x + sprite_width / 2, y + sprite_height, 'x');
+//txt = draw_text(x + sprite_width / 2, y + sprite_height, 'x');
 </string>
           </argument>
         </arguments>
