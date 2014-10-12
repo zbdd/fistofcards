@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>depth = y * -1;
+playable = false;
 draw_self();
 </string>
           </argument>

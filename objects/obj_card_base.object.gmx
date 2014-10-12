@@ -28,6 +28,8 @@
             <string>depth = y * -1;
 cardnum = 0;
 played = false;
+play_sound = snd_deck_shuffle;
+playable = true;
 </string>
           </argument>
         </arguments>

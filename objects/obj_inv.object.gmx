@@ -79,6 +79,30 @@ alarm[0] = TIME_RESET_DECK;
         </arguments>
       </action>
     </event>
+    <event eventtype="3" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///inv controls
+if (alarm[0] &lt; 5) audio_play_sound(snd_deck_shuffle,10, false);
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>
@@ -119,7 +143,7 @@ for (index = 0; index &lt; 4; index++) {
             card_at_slot[index].cardnum = index + 1; 
         } else if (card_at_slot[index].played == true &amp;&amp; alarm[0]) {
             draw_set_color(c_red);
-            tmptext[index] = draw_text(w / 16 * (index * 4 + 2), h / 24 * 2, alarm[0]);
+            tmptext[index] = draw_text(x + (w / 16 * (index * 4 + 2)), y + (h / 24 * 2), alarm[0]);
         } else {
             card_at_slot[index].x = x + (w / 16 * (index * 4 + 1));
             card_at_slot[index].y = y + (h / 24 * 1);

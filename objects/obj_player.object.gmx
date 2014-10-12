@@ -36,6 +36,7 @@ image_speed = 0.1;
 
 closest_enemy = false;
 auto_target = false;
+tmp = '';
 </string>
           </argument>
         </arguments>
@@ -69,12 +70,24 @@ speed = 0;
 
 inv_key_pressed = key_one + key_two + key_three + key_four;
 
+// playing of cards.
 if (inv_key_pressed &gt; 0) {
-    obj_inv.card_at_slot[inv_key_pressed - 1].played = true;    
+    if (obj_inv.card_at_slot[inv_key_pressed - 1] &amp;&amp; !obj_inv.card_at_slot[inv_key_pressed - 1].played) {
+        with (obj_inv.card_at_slot[inv_key_pressed - 1]) {
+            played = true;
+            audio_play_sound(play_sound,10,false);
+            if (instance_exists(obj_enemies.closest_enemy) &amp;&amp; obj_enemies.closest_enemy) {
+                with (obj_enemies.closest_enemy) {
+                    spell_effect = obj_inv.card_at_slot[obj_player.inv_key_pressed - 1].sprite_index;
+                    alarm[1] = 60 * 2;
+                }
+            }
+        }
+    }
 }
 
+// auto targetting of nearest enemy.
 if (auto_target) {
-    show_debug_message("still running");
     with (obj_enemies) {
         if (!ds_list_empty(active)) {
             dist = 10000;
@@ -92,13 +105,23 @@ if (auto_target) {
     }
 }
 
+// hero movement.
 if (mouse_two) move_towards_point(mouse_x, mouse_y, 2);
 if (mouse_one) {
+    // is enemy? select it.
     with (obj_enemies) {
         for (index = 0; index &lt; ds_list_size(active); index++) {
                 if (position_meeting(mouse_x, mouse_y, active[| index])) closest_enemy = active[| index];
         }
     }
+    // is door? open &amp;&amp; transition.
+    // ...
+    
+    // is chest? open and retreive.
+    // ...
+    
+    // is NPC? player close enough? talk.
+    // ...
 } 
 </string>
           </argument>
