@@ -33,6 +33,9 @@ instance_create(x,y,obj_enemies);
 
 //actual player creation code
 image_speed = 0.1;
+
+closest_enemy = false;
+auto_target = false;
 </string>
           </argument>
         </arguments>
@@ -60,6 +63,9 @@ key_one = keyboard_check_pressed(ord("1"));
 key_two = keyboard_check_pressed(ord("2")) * 2;
 key_three = keyboard_check_pressed(ord("3")) * 3;
 key_four = keyboard_check_pressed(ord("4")) * 4;
+mouse_one = mouse_check_button(mb_left);
+mouse_two = mouse_check_button(mb_right);
+speed = 0;
 
 inv_key_pressed = key_one + key_two + key_three + key_four;
 
@@ -67,22 +73,33 @@ if (inv_key_pressed &gt; 0) {
     obj_inv.card_at_slot[inv_key_pressed - 1].played = true;    
 }
 
-with (obj_enemies) {
-    if (!ds_list_empty(active)) {
-        dist = 600;
-        for (index = 0; index &lt; ds_list_size(active); index++) {
-            a2 = sqr(obj_player.x - active[| index].x);
-            b2 = sqr(obj_player.y - active[| index].y);
-            new_dist = sqrt(a2 + b2);
-                        
-            if (new_dist &lt; dist) {
-                dist = new_dist;
-                closest_enemy = active[| index];
+if (auto_target) {
+    show_debug_message("still running");
+    with (obj_enemies) {
+        if (!ds_list_empty(active)) {
+            dist = 10000;
+            for (index = 0; index &lt; ds_list_size(active); index++) {
+                a2 = sqr(obj_player.x - active[| index].x);
+                b2 = sqr(obj_player.y - active[| index].y);
+                new_dist = sqrt(a2 + b2);
+                            
+                if (new_dist &lt; dist) {
+                    dist = new_dist;
+                    closest_enemy = active[| index];
+                }
             }
         }
     }
 }
-move_towards_point(mouse_x, mouse_y, 2);
+
+if (mouse_two) move_towards_point(mouse_x, mouse_y, 2);
+if (mouse_one) {
+    with (obj_enemies) {
+        for (index = 0; index &lt; ds_list_size(active); index++) {
+                if (position_meeting(mouse_x, mouse_y, active[| index])) closest_enemy = active[| index];
+        }
+    }
+} 
 </string>
           </argument>
         </arguments>
