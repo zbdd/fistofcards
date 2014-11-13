@@ -18,6 +18,8 @@
       <sprite>sprites\spr_card_club</sprite>
       <sprite>sprites\spr_card_stab</sprite>
       <sprite>sprites\spr_card_freeze</sprite>
+      <sprite>sprites\spr_s_blood</sprite>
+      <sprite>sprites\spr_c_basic</sprite>
     </sprites>
     <sprite>sprites\spr_selected</sprite>
   </sprites>
@@ -26,6 +28,9 @@
   <scripts name="scripts">
     <script>scripts\random_card_selector.gml</script>
     <script>scripts\play_card.gml</script>
+    <scripts name="BattleSystem">
+      <script>scripts\s_init.gml</script>
+    </scripts>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fn_system</font>
@@ -37,14 +42,28 @@
     <object>objects\obj_cards</object>
     <object>objects\obj_enemies</object>
     <objects name="Cards">
-      <object>objects\obj_card_empty</object>
-      <object>objects\obj_card_base</object>
-      <object>objects\obj_card_club</object>
-      <object>objects\obj_card_stab</object>
-      <object>objects\obj_card_freeze</object>
+      <objects name="Conduit System">
+        <object>objects\o_conduit</object>
+        <object>objects\o_attack</object>
+        <object>objects\o_enemy</object>
+        <object>objects\o_hero</object>
+        <object>objects\o_chain</object>
+      </objects>
+      <objects name="old">
+        <object>objects\obj_card_freeze</object>
+        <object>objects\obj_card_stab</object>
+        <object>objects\obj_card_club</object>
+        <object>objects\obj_card_empty</object>
+        <object>objects\obj_card_base</object>
+      </objects>
+      <object>objects\o_c_basic</object>
+      <object>objects\o_card</object>
+      <object>objects\o_s_blood</object>
+      <object>objects\o_tester</object>
     </objects>
   </objects>
   <rooms name="rooms">
+    <room>rooms\rm_test_battle</room>
     <room>rooms\default_room</room>
     <room>rooms\backuproom</room>
   </rooms>

@@ -25,42 +25,13 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///setup enemies
-active = ds_list_create();
-dist = 10000;
-closest_enemy = false;
-tmp = false;
-
-//test enemies
-ds_list_add(active, instance_create(obj_player.x - 100, obj_player.y, obj_enemy_base));
-ds_list_add(active, instance_create(obj_player.x, obj_player.y + 200, obj_enemy_base));
-
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="2" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>///enemy effect
-for (index = 0; index &lt; ds_list_size(active); index++) {
-    tmp[index] = false;
-}
+            <string>type = 'starter';
+name = 'default';
+desc = 'default desc';
+dmg = 0;
+chains = 0;
+multi = 0;
+crit = 0;
 </string>
           </argument>
         </arguments>
@@ -83,12 +54,7 @@ for (index = 0; index &lt; ds_list_size(active); index++) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (instance_exists(closest_enemy) &amp;&amp; closest_enemy) {
-    tl = draw_sprite(spr_selected, 0, closest_enemy.x - closest_enemy.sprite_width / 2, closest_enemy.y - closest_enemy.sprite_height / 2); 
-    tr = draw_sprite(spr_selected, 1, closest_enemy.x + closest_enemy.sprite_width / 2, closest_enemy.y - closest_enemy.sprite_height / 2);
-    bl = draw_sprite(spr_selected, 2, closest_enemy.x - closest_enemy.sprite_width / 2, closest_enemy.y + closest_enemy.sprite_height / 2);
-    br = draw_sprite(spr_selected, 3, closest_enemy.x + closest_enemy.sprite_width / 2, closest_enemy.y + closest_enemy.sprite_height / 2);
-}
+            <string>///Don't draw automatically.
 </string>
           </argument>
         </arguments>
