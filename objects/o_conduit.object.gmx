@@ -27,6 +27,7 @@
             <kind>1</kind>
             <string>///Prepare new conduit
 status = "sleep";
+
 enemies = ds_list_create(); // 0 refers to selected enemy.
 pool = ds_list_create(); // Available cards.
 deck = ds_list_create(); // Available cards left.
@@ -37,6 +38,8 @@ discard = ds_list_create(); // Discarded cards from the deck.
 // Prepare new chain
 var main_chain = instance_create(x,y,o_chain);
 ds_list_add(chains, main_chain);
+
+HAND_SIZE = 4;
 </string>
           </argument>
         </arguments>
@@ -62,12 +65,9 @@ ds_list_add(chains, main_chain);
             <string>///State progression
 
 pressed = 0;
-// Hard set for now...
-HAND_SIZE = 3;
-if (HAND_SIZE &gt; ds_list_size(deck)) HAND_SIZE = ds_list_size(deck); 
 
 if (status == 'listen') {
-    // Listen for keys corresponding to active cards.
+        // Listen for keys corresponding to active cards.
     for (i = 1; i &lt; ds_list_size(active) + 1; i++) {
         if (keyboard_check_pressed(ord(string(i)))) {
             pressed = 1 * i;
@@ -79,12 +79,11 @@ if (status == 'listen') {
         status = 'action';
     }
 } else if (status == 'action') {
-    status = 'discard';
+show_debug_message(status);
+        status = 'discard';
 
     // Add a copy to the chain. (The original chain)
     // More chains &gt; more attacks.
-    show_debug_message(object_get_name(active[| pressed].object_index));
-    show_debug_message("*********************");
     ds_list_add(chains[| 0].chain, instance_create(x,y,active[| pressed].object_index));
     
     // Add more cards?
@@ -93,7 +92,8 @@ if (status == 'listen') {
     
     // etc...
 } else if (status == 'start') {
-    status = 'listen';
+show_debug_message(status);
+        status = 'listen';
     
     ds_list_copy(deck, pool);
     ds_list_shuffle(deck); // Forced shuffle.
@@ -106,29 +106,41 @@ if (status == 'listen') {
         }
     }
 } else if (status == 'discard') {
-    status = 'shuffle';
+show_debug_message(status);
+        status = 'shuffle';
     
     for (i = 0; i &lt; ds_list_size(active); i++) {
         ds_list_add(discard, active[| i]);
+        ds_list_delete(active, i);
     }
-    ds_list_clear(active);
 
 } else if (status == 'shuffle') {
-    status = 'deal';
-    
+show_debug_message(status);
+        status = 'deal';
+        
     ds_list_shuffle(deck);
-} else if (status == 'deal') {
-    status = 'listen';
-    
-    for (i = 0; i &lt; HAND_SIZE; i++) {
-        // Forced shuffle and deal when the deck is all used up.
-        if (ds_list_size(deck &lt;= 0)) {
-            ds_list_copy(deck, discard);
-            ds_list_shuffle(deck);
+        
+    if (HAND_SIZE &gt;= ds_list_size(deck)) {
+        ds_list_shuffle(discard);
+        for (j = 0; j &lt; ds_list_size(discard); j++) {
+            show_debug_message("moving to deck");
+            ds_list_add(deck, discard[| j]);
+            ds_list_delete(discard, j);
         }
-        if (deck[| i].type == 'chain') {
+    }
+} else if (status == 'deal') {
+        status = 'listen';
+        
+    for (i = 0; i &lt; HAND_SIZE &amp;&amp; i &lt; (ds_list_size(deck) + ds_list_size(discard)); i++) {
+        if (i &gt;= ds_list_size(deck)) {
+            status = 'shuffle';
+            break;
+        }
+        if (deck[| i].type == 'chain' || deck[| i].type == 'end') {
             ds_list_add(active, deck[| i]);
             ds_list_delete(deck, i);
+            status = 'deal';
+            break;
         }    
     }
 }
@@ -162,8 +174,16 @@ w = view_wview[0];
 h = view_hview[0];
 
 // Main HUD background.
+// DONT LOOK AT ME! IM HORRIBLE DEBUGGING.
+// TODO XXX REMOVE
 draw_set_color(c_gray);
 draw_rectangle(x,y,x + w,y + h/4,false);
+draw_set_color(c_red);
+draw_text(x + 10,h/2, ds_list_size(active));
+draw_set_color(c_blue);
+draw_text(x + 30,h/2, ds_list_size(deck));
+draw_set_color(c_black);
+draw_text(x + 50,h/2, ds_list_size(discard));
 
 // Default boxes for cards.
 for (index = 0; index &lt; ds_list_size(active); index++) {

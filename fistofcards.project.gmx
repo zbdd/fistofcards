@@ -20,6 +20,8 @@
       <sprite>sprites\spr_card_freeze</sprite>
       <sprite>sprites\spr_s_blood</sprite>
       <sprite>sprites\spr_c_basic</sprite>
+      <sprite>sprites\spr_e_sword</sprite>
+      <sprite>sprites\spr_c_b_t_r</sprite>
     </sprites>
     <sprite>sprites\spr_selected</sprite>
   </sprites>
@@ -30,6 +32,10 @@
     <script>scripts\play_card.gml</script>
     <scripts name="BattleSystem">
       <script>scripts\s_init.gml</script>
+      <scripts name="Tests">
+        <script>scripts\s_test_01.gml</script>
+        <script>scripts\s_test_02.gml</script>
+      </scripts>
     </scripts>
   </scripts>
   <fonts name="fonts">
@@ -48,6 +54,7 @@
         <object>objects\o_enemy</object>
         <object>objects\o_hero</object>
         <object>objects\o_chain</object>
+        <object>objects\o_tester</object>
       </objects>
       <objects name="old">
         <object>objects\obj_card_freeze</object>
@@ -56,10 +63,17 @@
         <object>objects\obj_card_empty</object>
         <object>objects\obj_card_base</object>
       </objects>
-      <object>objects\o_c_basic</object>
+      <objects name="Starter">
+        <object>objects\o_s_blood</object>
+      </objects>
+      <objects name="Chain">
+        <object>objects\o_c_b_t_r</object>
+        <object>objects\o_c_basic</object>
+      </objects>
+      <objects name="End">
+        <object>objects\o_e_sword</object>
+      </objects>
       <object>objects\o_card</object>
-      <object>objects\o_s_blood</object>
-      <object>objects\o_tester</object>
     </objects>
   </objects>
   <rooms name="rooms">
