@@ -36,6 +36,9 @@
         <script>scripts\s_test_01.gml</script>
         <script>scripts\s_test_02.gml</script>
       </scripts>
+      <script>scripts\s_change_status.gml</script>
+      <script>scripts\s_change_status_type.gml</script>
+      <script>scripts\s_change_status_type_max.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">
@@ -68,10 +71,8 @@
       </objects>
       <objects name="Chain">
         <object>objects\o_c_b_t_r</object>
-        <object>objects\o_c_basic</object>
-      </objects>
-      <objects name="End">
         <object>objects\o_e_sword</object>
+        <object>objects\o_c_basic</object>
       </objects>
       <object>objects\o_card</object>
     </objects>

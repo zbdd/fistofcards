@@ -5,4 +5,5 @@ conduit.enemies = argument2;
 
 with (conduit) {
     status = 'start';
+    in_deck = ds_list_size(pool);
 }

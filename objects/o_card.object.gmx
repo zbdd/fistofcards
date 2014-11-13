@@ -32,6 +32,7 @@ dmg = 0;
 chains = 0;
 multi = 0;
 crit = 0;
+state = 'deck';
 </string>
           </argument>
         </arguments>
@@ -54,7 +55,7 @@ crit = 0;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Don't draw automatically.
+            <string>if (state == 'hand') draw_self();
 </string>
           </argument>
         </arguments>
