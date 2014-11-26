@@ -71,7 +71,7 @@ if (status == 'listen') {
     pressed = 0;
     action_points = 1;
     run_once = true;
-    
+    in_hand = s_count_state("hand", pool)
     // Listen for keys corresponding to active cards.
     for (i = 1; i &lt; in_hand + 1; i++) {
         if (keyboard_check_pressed(ord(string(i)))) {
@@ -109,15 +109,13 @@ if (status == 'listen') {
     status = 'listen';
         
     ds_list_shuffle(pool);
-    in_hand = s_change_status_type('hand', 'deck', pool, 'starter');
-    in_deck -= in_hand;
+    s_change_status_type('hand', 'deck', pool, 'starter');
     
 } else if (status == 'discard') {
     show_debug_message(status);
     status = 'shuffle';
     
-    in_discard = s_change_status('discard', 'hand', pool);
-    in_hand -= in_discard;
+    s_change_status('discard', 'hand', pool);
 
 } else if (status == 'shuffle') {
     show_debug_message(status);
@@ -129,12 +127,11 @@ if (status == 'listen') {
     show_debug_message(status);
     status = 'listen';
     
-    in_hand += s_change_status_type_max('hand', 'deck', pool, 'chain', (HAND_SIZE - in_hand));
-    in_deck -= in_hand;
+    s_change_status_type_max('hand', 'deck', pool, 'chain', (HAND_SIZE - in_hand));
+    in_hand = s_count_state("hand", pool);
     
     if (in_hand &lt; HAND_SIZE &amp;&amp; run_once == true) {
-        in_deck += s_change_status('deck', 'discard', pool);
-        in_discard = 0;
+        s_change_status('deck', 'discard', pool);
         status = 'deal';
         run_once = false;
     }
