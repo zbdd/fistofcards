@@ -28,12 +28,148 @@
             <string>// Testing object to call our tests from.
 image_speed = 0;
 
+setup = true;
+run_test = false;
+check_test = false;
+destroy = false;
+is_test_suite = false;
+test_to_run = -1;
+
+global.tests = 0;
+global.tests_passed = 0;
+
 // These are interative tests, call one at a time.
 // s_test_01();
-s_test_02();
-
-// Place for automated tests... not implemented yet.
-// Do this, Do that...
+// s_test_02();
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>show_debug_message("ALARM");
+switch (test_to_run) {
+    case 1:
+        // Make sure the action has been completed.
+        global.tests++;
+        if (ds_list_size(t_conduit.chains) &gt; 0) {show_debug_message("depth");
+            if (ds_list_size(t_conduit.chains[| 0].chain) &gt; 0) {show_debug_message("depth two");
+                if (t_conduit.chains[| 0].chain[| 0].name == "blood source") {
+                    global.tests_passed++;
+                }
+            }
+        }
+        test_to_run = 2;
+        break;
+    case 2:
+        global.tests++;
+        if (ds_list_size(t_conduit.chains) &gt; 0) {show_debug_message("cheese");
+            if (ds_list_size(t_conduit.chains[| 0].chain) &gt; 1) {show_debug_message("cheese two");
+                if (t_conduit.chains[| 0].chain[| 1].name == "basic") {
+                    global.tests_passed++;
+                }
+            }
+        }
+        test_to_run = -1;
+    break;
+ 
+    default:   
+        destroy = true;
+        run_test = false;
+}
+if (destroy != true) {
+    run_test = true;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="3" enumb="2">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if (setup) {
+    enemies = ds_list_create();
+    current_cards = ds_list_create();
+    
+    var new_blood = instance_create(x,y,o_s_blood);
+    var new_chain_card = instance_create(x,y,o_c_basic);
+    var t1 = instance_create(x,y,obj_card_freeze);
+    var t2 = instance_create(x,y,obj_card_stab);
+    var t3 = instance_create(x,y,obj_card_club);
+    
+    ds_list_add(current_cards, new_blood);
+    ds_list_add(current_cards, new_chain_card);
+    ds_list_add(current_cards, t1);
+    ds_list_add(current_cards, t2);
+    ds_list_add(current_cards, t3);
+    
+    t_conduit = s_init(self, current_cards, enemies);
+    run_test = false;
+    setup = false;
+} else if (run_test) {
+    if (t_conduit.status == 'listen') {
+        switch (test_to_run) {
+            case 1:    
+                with (t_conduit) {
+                    keyboard_key_press(ord("1")); show_debug_message("PRESSED");
+                }
+                break;
+            case 2:
+                with (t_conduit) {
+                    keyboard_key_press(ord("1")); show_debug_message("PRESSED - 2");
+                }
+                break;
+        }
+        show_debug_message("PREPPING FOR JESUS");
+        run_test = false;
+        alarm[0] = 120
+    }
+} else if (destroy &amp;&amp; !is_test_suite) {
+    destroy = false;
+    /*
+    
+    show_debug_message("Tests Run:");
+    show_debug_message(global.tests);
+    show_debug_message("Tests Passed:");
+    show_debug_message(global.tests_passed);
+    show_debug_message("Tests Failed:");
+    show_debug_message(global.tests-global.tests_passed);
+    
+    with (t_conduit) {
+        instance_destroy();
+    }*/
+}
 </string>
           </argument>
         </arguments>

@@ -34,11 +34,13 @@
       <script>scripts\s_init.gml</script>
       <scripts name="Tests">
         <script>scripts\s_test_01.gml</script>
+        <script>scripts\s_a_test_01.gml</script>
         <script>scripts\s_test_02.gml</script>
       </scripts>
       <script>scripts\s_change_status.gml</script>
       <script>scripts\s_change_status_type.gml</script>
       <script>scripts\s_change_status_type_max.gml</script>
+      <script>scripts\s_count_state.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">
@@ -79,8 +81,8 @@
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_test_battle</room>
-    <room>rooms\default_room</room>
     <room>rooms\backuproom</room>
+    <room>rooms\default_room</room>
   </rooms>
   <constants number="2">
     <constant name="GM_build_date">41919.4969761921</constant>
