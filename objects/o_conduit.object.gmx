@@ -30,11 +30,7 @@ status = "sleep";
 
 enemies = ds_list_create(); // 0 refers to selected enemy.
 pool = ds_list_create(); // Available cards.
-chains = ds_list_create(); // Chained cards.
-
-// Prepare new chain
-var main_chain = instance_create(x,y,o_chain);
-ds_list_add(chains, main_chain);
+chains = ds_grid_create(10,10); // Chained cards.
 
 HAND_SIZE = 3;
 in_hand = 0;
@@ -42,6 +38,14 @@ in_deck = ds_list_size(pool);
 in_discard = 0;
 action_points = 1;
 run_once = true;
+
+// For the chains graph.
+addx = 0;
+addy = 0;
+
+// Debugging.
+drawn = 0;
+select = instance_create(x, y, o_select);
 </string>
           </argument>
         </arguments>
@@ -89,12 +93,13 @@ if (status == 'listen') {
     status = 'action';
     i = 0;
 
-    // Add a copy  of card to the chain.
-    // More chains &gt; more attacks. (not implemented yet)
     for (j = 0; j &lt; ds_list_size(pool); j++) {
         if (pool[| j].state == 'hand') {
             if (i == pressed - 1) {
-                ds_list_add(chains[| 0].chain, instance_create(x,y,pool[| j].object_index));
+                newnode = instance_create(x,y,pool[| j].object_index);
+                newnode.state = 'draw';
+                ds_grid_add(chains, addx, addy, newnode);
+                addy++;
                 break;
             } else {
                 i++;
@@ -193,6 +198,26 @@ for (i = 0; i &lt; ds_list_size(pool); i++) {
         index++;
     }
 }
+drawn = 0;
+// Draw selected cards.
+for (i = 0; i &lt; ds_grid_width(chains); i++) {
+    for (j = 0; j &lt; ds_grid_height(chains); j++) {
+        if (i == addx &amp;&amp; j == addy) {
+            select.x = (x + 100) + (1 * (i * 100));
+            select.y = (h - 150) - (1 * (j * 150));
+        }
+        if (chains[# i, j] != 0) {
+            todraw = chains[# i, j];
+            with (todraw) {
+                depth = 1 * -y;
+                x = (o_conduit.x + 100) + (1 * (o_conduit.i * 100));
+                y = (o_conduit.h - 150) - (1 * (o_conduit.j * 150));
+            }
+            drawn++;
+        }
+    }
+}
+show_debug_message(drawn);
 
 </string>
           </argument>

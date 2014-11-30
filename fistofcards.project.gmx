@@ -19,6 +19,7 @@
       <sprite>sprites\spr_card_stab</sprite>
       <sprite>sprites\spr_card_freeze</sprite>
       <sprite>sprites\spr_s_blood</sprite>
+      <sprite>sprites\spr_select</sprite>
       <sprite>sprites\spr_c_basic</sprite>
       <sprite>sprites\spr_e_sword</sprite>
       <sprite>sprites\spr_c_b_t_r</sprite>
@@ -78,6 +79,7 @@
       </objects>
       <object>objects\o_card</object>
     </objects>
+    <object>objects\o_select</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_test_battle</room>
