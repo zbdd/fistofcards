@@ -46,6 +46,9 @@ addy = 0;
 // Debugging.
 drawn = 0;
 select = instance_create(x, y, o_select);
+select.image_xscale = 0.5;
+select.image_yscale = 0.5;
+move_by = 75;
 </string>
           </argument>
         </arguments>
@@ -98,6 +101,8 @@ if (status == 'listen') {
             if (i == pressed - 1) {
                 newnode = instance_create(x,y,pool[| j].object_index);
                 newnode.state = 'draw';
+                newnode.image_xscale = 0.5;
+                newnode.image_yscale = 0.5;
                 ds_grid_add(chains, addx, addy, newnode);
                 addy++;
                 break;
@@ -198,26 +203,25 @@ for (i = 0; i &lt; ds_list_size(pool); i++) {
         index++;
     }
 }
-drawn = 0;
+
 // Draw selected cards.
 for (i = 0; i &lt; ds_grid_width(chains); i++) {
     for (j = 0; j &lt; ds_grid_height(chains); j++) {
         if (i == addx &amp;&amp; j == addy) {
-            select.x = (x + 100) + (1 * (i * 100));
-            select.y = (h - 150) - (1 * (j * 150));
+            select.x = (x + move_by) + (1 * (i * move_by));
+            select.y = (h - move_by) - (1 * (j * move_by));
         }
         if (chains[# i, j] != 0) {
             todraw = chains[# i, j];
             with (todraw) {
                 depth = 1 * -y;
-                x = (o_conduit.x + 100) + (1 * (o_conduit.i * 100));
-                y = (o_conduit.h - 150) - (1 * (o_conduit.j * 150));
+                x = (o_conduit.x + o_conduit.move_by) + (1 * (o_conduit.i * o_conduit.move_by));
+                y = (o_conduit.h - o_conduit.move_by) - (1 * (o_conduit.j * o_conduit.move_by));
             }
             drawn++;
         }
     }
 }
-show_debug_message(drawn);
 
 </string>
           </argument>
