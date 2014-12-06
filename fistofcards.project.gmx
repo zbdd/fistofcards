@@ -42,7 +42,10 @@
       <script>scripts\s_change_status_type.gml</script>
       <script>scripts\s_change_status_type_max.gml</script>
       <script>scripts\s_count_state.gml</script>
+      <script>scripts\s_add_to_node.gml</script>
+      <script>scripts\s_update_adj.gml</script>
     </scripts>
+    <script>scripts\s_debug.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fn_system</font>
@@ -74,8 +77,10 @@
       </objects>
       <objects name="Chain">
         <object>objects\o_c_b_t_r</object>
-        <object>objects\o_e_sword</object>
         <object>objects\o_c_basic</object>
+      </objects>
+      <objects name="End">
+        <object>objects\o_e_sword</object>
       </objects>
       <object>objects\o_card</object>
     </objects>
