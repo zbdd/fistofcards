@@ -32,6 +32,7 @@ enemies = ds_list_create(); // 0 refers to selected enemy.
 pool = ds_list_create(); // Available cards.
 nodes = ds_list_create(); // Chained cards.
 adj = ds_list_create(); // Adjaceny graph.
+attacks = ds_list_create(); // Combined attacks.
 
 HAND_SIZE = 3;
 in_hand = 0;
@@ -81,7 +82,6 @@ global.debug = true;
 
 if (status == 'listen') {
     pressed = 0;
-    action_points = 1;
     run_once = true;
     in_hand = s_count_state("hand", pool)
     // Listen for keys corresponding to active cards.
@@ -94,7 +94,6 @@ if (status == 'listen') {
     
     // Something was pressed.
     if (pressed &gt; 0) {
-        action_points--;
         status = 'action';
     } else if (endturn &gt; 0) {
         status = 'combine';
@@ -102,11 +101,13 @@ if (status == 'listen') {
 } else if (status == 'action') {
     s_debug(status);
     status = 'action';
+    index = 0;
     
     for (i = 0; i &lt; ds_list_size(pool); i++) {
         if (pool[| i].state == 'hand') {
-            if (i == pressed - 1) {
+            if (index == pressed - 1) {
                 s_add_to_node(nodes, pool[| i].object_index);
+                s_debug(object_get_name(pool[| i].object_index));
                 
                 // Defaults for the adj array.
                 var array;
@@ -127,50 +128,18 @@ if (status == 'listen') {
                 }
                 ds_list_add(adj, array);
 
-                for(k = 0; k &lt; ds_list_size(adj); k++) {
-                    for (j = 0; j &lt; 4; j++) {
-                        show = adj[| k];
-                    }
-                }
-                s_debug("********");
                 // MISSING
                 // Add right.
                 // Set base node adjaceny.
                 
-            }
+            } else index++;
+            // End state reached.
+            if (pool[| i].type == 'end') status = 'combine';
         }
     }
-    
-            
-    /*for (j = 0; j &lt; ds_list_size(pool); j++) {
-        if (pool[| j].state == 'hand') {
-            if (i == pressed - 1) {
-                newnode = instance_create(x,y,pool[| j].object_index);
-                newnode.state = 'draw';
-                // Scale this puppy.
-                newnode.image_xscale = 0.5;
-                newnode.image_yscale = 0.5;
-                if (j &gt; 0) {
-                    // TOP, RIGHT, BOTTOM, LEFT.
-                    array[0] = top;
-                    array[1] = right;
-                    array[2] = bottom;
-                    array[3] = left;
-                    adj[| j] = array;
-                }
-                ds_list_add(chains, newnode);
-                break;
-            } else {
-                i++;
-            }
-        }
-    }*/
    
-    // At some point allow multiple actions per shuffle.
-    if (action_points &lt;= 0) status = 'discard';
-    // End state reached.
-    //if (newnode.type = 'end') status = 'combine';
-    
+    if (status != 'combine') status = 'discard';
+  
 } else if (status == 'start') {
     s_debug(status);
     status = 'listen';
@@ -183,6 +152,8 @@ if (status == 'listen') {
     status = 'shuffle';
     
     s_change_status('discard', 'hand', pool);
+    
+    if (ds_list_size(attacks) &gt; 0) status = 'listenforattack';
 
 } else if (status == 'shuffle') {
     s_debug(status);
@@ -194,7 +165,9 @@ if (status == 'listen') {
     s_debug(status);
     status = 'listen';
     
+    in_hand = s_count_state("hand", pool);
     s_change_status_type_max('hand', 'deck', pool, 'chain', (HAND_SIZE - in_hand));
+    s_change_status_type_max('hand', 'deck', pool, 'end', (HAND_SIZE - in_hand));
     in_hand = s_count_state("hand", pool);
     
     if (in_hand &lt; HAND_SIZE &amp;&amp; run_once == true) {
@@ -203,27 +176,52 @@ if (status == 'listen') {
         run_once = false;
     }
 } else if (status == 'combine') {
+    s_debug(status);
+    
     // From source.
     nodestofollow = 1;
     followed = 0;
-    node = 0; // Follow top node.
+    node = 0;
     
     while (nodestofollow &gt; 0 &amp;&amp; ds_list_size(adj) &gt; 0) {
-        follow = -1;
+
         if (node &gt; -1) {
+            endnode = node;
             node = adj[| node];
             node = node[0];
-        } 
-        s_debug(status);
-        if (follow &gt; -1) nodestofollow = 1;
+        }
+        
+        if (node &gt; -1) nodestofollow = 1;
         else nodestofollow = 0;
         followed++;
     }
-    s_debug("Followed");
-    s_debug(followed);
-    s_debug("******");
     
-    status = 'listen';
+    
+    if (followed &gt; 0 &amp;&amp; nodes[| endnode].type == 'end') {
+        attack = instance_create(x, y, o_card);
+        attack.sprite_index = nodes[| endnode].sprite_index;
+        attack.state = 'draw';
+        attack.charges = 1;
+        ds_list_add(attacks, attack);
+    }
+    status = 'discard';
+    
+} else if (status == 'listenforattack') {
+    pressed = 0;
+    
+    // Listen for keys corresponding to active attacks.
+    for (i = 1; i &lt; ds_list_size(attacks) + 1; i++) {
+        if (keyboard_check_pressed(ord(string(i)))) {
+            pressed = 1 * i;
+        }
+    }
+    endturn = keyboard_check_pressed(vk_space); 
+    // Something was pressed.
+    if (pressed &gt; 0) {
+        status = 'attack';
+    } else if (endturn &gt; 0) {
+        status = 'discard';
+    }
 }
 </string>
           </argument>
@@ -274,12 +272,19 @@ draw_text(x + 90,h/2 + 60, s_count_state("discard", pool));
 
 index = 0;
 
-// Draw the actual cards.
-for (i = 0; i &lt; ds_list_size(pool); i++) {
-    if (pool[| i].state == 'hand') {
-        pool[| i].x = x + (w / 16 * (index * 4 + 1));
-        pool[| i].y = y + (h / 24 * 1);
-        index++;
+if (status != 'listenforattack') {
+    // Draw the actual cards.
+    for (di = 0; di &lt; ds_list_size(pool); di++) {
+        if (pool[| di].state == 'hand') {
+            pool[| di].x = x + (w / 16 * (index * 4 + 1));
+            pool[| di].y = y + (h / 24 * 1);
+            index++;
+        }
+    }
+} else {
+    for(di = 0; di &lt; ds_list_size(attacks); di++) {
+        attacks[| di].x = x + (w / 16 * (di * 4 + 1));
+        attacks[| di].y = y + (h / 24 * 1);
     }
 }
 </string>

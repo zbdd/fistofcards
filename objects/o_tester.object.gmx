@@ -127,12 +127,14 @@ if (destroy != true) {
     var t1 = instance_create(x,y,obj_card_freeze);
     var t2 = instance_create(x,y,obj_card_stab);
     var t3 = instance_create(x,y,obj_card_club);
+    var t4 = instance_create(x,y,o_e_sword);
     
     ds_list_add(current_cards, new_blood);
     ds_list_add(current_cards, new_chain_card);
     ds_list_add(current_cards, t1);
     ds_list_add(current_cards, t2);
     ds_list_add(current_cards, t3);
+    ds_list_add(current_cards, t4);
     
     t_conduit = s_init(self, current_cards, enemies);
     run_test = false;
