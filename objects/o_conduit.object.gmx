@@ -40,6 +40,7 @@ in_deck = ds_list_size(pool);
 in_discard = 0;
 action_points = 1;
 run_once = true;
+selectedattack = -1;
 
 // For the chains graph.
 top = -1;
@@ -84,13 +85,15 @@ if (status == 'listen') {
     pressed = 0;
     run_once = true;
     in_hand = s_count_state("hand", pool)
+    endturn = 0;
+    
     // Listen for keys corresponding to active cards.
     for (i = 1; i &lt; in_hand + 1; i++) {
         if (keyboard_check_pressed(ord(string(i)))) {
             pressed = 1 * i;
         }
     }
-    endturn = keyboard_check_pressed(vk_space);
+    endturn = keyboard_check_pressed(vk_space); // Force check for a combination.
     
     // Something was pressed.
     if (pressed &gt; 0) {
@@ -101,11 +104,13 @@ if (status == 'listen') {
 } else if (status == 'action') {
     s_debug(status);
     status = 'action';
-    index = 0;
-    
+    index = 1;
+    s_debug(pressed);
     for (i = 0; i &lt; ds_list_size(pool); i++) {
         if (pool[| i].state == 'hand') {
-            if (index == pressed - 1) {
+            if (pool[| i].type == 'end') status = 'combine';
+            
+            if (index == pressed) {
                 s_add_to_node(nodes, pool[| i].object_index);
                 s_debug(object_get_name(pool[| i].object_index));
                 
@@ -131,10 +136,10 @@ if (status == 'listen') {
                 // MISSING
                 // Add right.
                 // Set base node adjaceny.
-                
+                break;             
             } else index++;
             // End state reached.
-            if (pool[| i].type == 'end') status = 'combine';
+            
         }
     }
    
@@ -146,6 +151,7 @@ if (status == 'listen') {
         
     ds_list_shuffle(pool);
     s_change_status_type('hand', 'deck', pool, 'starter');
+    s_change_status_type('hand', 'discard', pool, 'starter');
     
 } else if (status == 'discard') {
     s_debug(status);
@@ -153,7 +159,15 @@ if (status == 'listen') {
     
     s_change_status('discard', 'hand', pool);
     
-    if (ds_list_size(attacks) &gt; 0) status = 'listenforattack';
+    if (ds_list_size(attacks) &gt; 0) {
+        if (endturn &gt; 0) {
+            status = 'start';
+                     
+            // I dunno why the fuck ds_list_clear didn't work for me.
+            ds_list_clear(attacks);
+        }
+        else status = 'listenforattack';
+    }
 
 } else if (status == 'shuffle') {
     s_debug(status);
@@ -196,31 +210,40 @@ if (status == 'listen') {
         followed++;
     }
     
-    
     if (followed &gt; 0 &amp;&amp; nodes[| endnode].type == 'end') {
-        attack = instance_create(x, y, o_card);
+        var attack = instance_create(x, y, o_card);
         attack.sprite_index = nodes[| endnode].sprite_index;
         attack.state = 'draw';
-        attack.charges = 1;
+        attack.charge = 1;
         ds_list_add(attacks, attack);
     }
     status = 'discard';
     
 } else if (status == 'listenforattack') {
+    // Probably can separate this out to a different state engine eventually
     pressed = 0;
+    endturn = 0;
     
     // Listen for keys corresponding to active attacks.
     for (i = 1; i &lt; ds_list_size(attacks) + 1; i++) {
-        if (keyboard_check_pressed(ord(string(i)))) {
+        if (keyboard_check_pressed(ord(string(i))) &amp;&amp; attacks[| i - 1].charge &gt; 0) {
             pressed = 1 * i;
         }
     }
     endturn = keyboard_check_pressed(vk_space); 
+    
     // Something was pressed.
     if (pressed &gt; 0) {
-        status = 'attack';
+        selectedattack = attacks[| pressed - 1];
     } else if (endturn &gt; 0) {
         status = 'discard';
+    }
+    
+    if (mouse_check_button(mb_left) &amp;&amp; selectedattack &gt; -1) {
+        if (selectedattack.charge &gt; 0) {
+            // Attack.
+            selectedattack.charge--;
+        }
     }
 }
 </string>
@@ -285,6 +308,14 @@ if (status != 'listenforattack') {
     for(di = 0; di &lt; ds_list_size(attacks); di++) {
         attacks[| di].x = x + (w / 16 * (di * 4 + 1));
         attacks[| di].y = y + (h / 24 * 1);
+        if (selectedattack == di) {
+            draw_set_colour(c_red);
+            draw_rectangle(attacks[| di].x, attacks[| di].y, attacks[| di].sprite_width, attacks[| di].sprite_height, true);
+            draw_set_colour(c_white);
+        }
+        with (attacks[| di]) {
+            draw_self();
+        }
     }
 }
 </string>

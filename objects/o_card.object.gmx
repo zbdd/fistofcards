@@ -33,6 +33,7 @@ chains = 0;
 multi = 0;
 crit = 0;
 state = 'deck';
+charge = -1;
 </string>
           </argument>
         </arguments>
@@ -55,7 +56,12 @@ state = 'deck';
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (state == 'hand' || state == 'draw') draw_self();
+            <string>if (charge == 0) {
+    image_blend = c_red;
+} else {
+    image_blend = c_white;
+}
+if (state == 'hand' || state == 'draw') draw_self();
 </string>
           </argument>
         </arguments>

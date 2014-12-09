@@ -118,7 +118,10 @@ if (destroy != true) {
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (setup) {
+            <string>mouse_two = mouse_check_button(mb_right);
+speed = 0;
+if (mouse_two) move_towards_point(mouse_x, mouse_y, 2);
+if (setup) {
     enemies = ds_list_create();
     current_cards = ds_list_create();
     
